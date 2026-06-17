@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
+
 from .models import Project
+from .forms import IceCreamForm
 
 
 def project_list(request):
@@ -15,4 +17,22 @@ def project_list(request):
         request,
         'main/project_list.html',
         {'page_obj': page_obj}
+    )
+
+
+def create_icecream(request):
+    if request.method == 'POST':
+        form = IceCreamForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    else:
+        form = IceCreamForm()
+
+    return render(
+        request,
+        'main/icecream_form.html',
+        {'form': form}
     )
